@@ -1,5 +1,6 @@
 const container = document.getElementById('container');
-const darken = document.getElementById('darken');
+const toggleMode = document.getElementById('toggleMode');
+const colorfulMode = document.getElementById('colorfulMode');
 
 function render(size = 16){
 	container.innerHTML = '';
@@ -24,11 +25,32 @@ resizeBtn.addEventListener('click', () => {
 	}
 });
 
+const shakeBtn = document.getElementById('shakeBtn');
+shakeBtn.addEventListener('click', () => {
+	Array.from(document.getElementsByClassName('cell')).forEach(cell => {
+		cell.style.background = '';
+		cell.classList.remove('colored');
+	});
+});
+
+function getRandomColor() {
+	return '#' + Math.floor(Math.random() * 16777215).toString(16);
+}
+
 addEventListener('mouseover', (event) => {
 	if(event.target.classList.contains('cell')){
-		if(darken.checked){
-		} else {
-			event.target.classList.toggle('black');
+		if(toggleMode.checked){
+			if(!event.target.classList.contains('colored')){
+				event.target.style.background = colorfulMode.checked ? getRandomColor() : 'black';
+				event.target.classList.add('colored');
+			} else{
+				event.target.style.background = 'white';
+				event.target.classList.remove('colored');
+			}
+		}
+		else if(!event.target.classList.contains('colored') || colorfulMode.checked){
+				event.target.style.background = colorfulMode.checked ? getRandomColor() : 'black';
+			event.target.classList.add('colored');
 		}
 	}
 });
